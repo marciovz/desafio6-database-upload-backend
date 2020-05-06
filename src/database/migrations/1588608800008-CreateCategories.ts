@@ -17,14 +17,17 @@ export default class CreateCategories1588608800008
           {
             name: 'title',
             type: 'varchar',
+            isUnique: true,
           },
           {
             name: 'created_at',
             type: 'timestamp with time zone',
+            default: 'now()',
           },
           {
             name: 'updated_at',
             type: 'timestamp with time zone',
+            default: 'now()',
           },
         ],
       }),
