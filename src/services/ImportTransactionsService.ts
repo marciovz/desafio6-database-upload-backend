@@ -1,9 +1,4 @@
-import {
-  getCustomRepository,
-  getRepository,
-  In,
-  TransactionRepository,
-} from 'typeorm';
+import { getCustomRepository, getRepository, In } from 'typeorm';
 import csvParse from 'csv-parse';
 import fs from 'fs';
 
@@ -50,26 +45,34 @@ class ImportTransactionsService {
     await new Promise(resolve => parseCSV.on('end', resolve));
 
     /** TRATAMENTO DAS CATEGORIAS */
+
+    /** Retorna todas categorias que já existem no banco */
     const existentCategories = await categoriesRepository.find({
       where: {
         title: In(categories),
       },
     });
 
+    /** Retorna apenas os titulos das categorias existentes */
     const existentCategoriesTitles = existentCategories.map(
       (category: Category) => category.title,
     );
 
+    /** Retorna o nome das categorias que precisam ser armazenadas no db
+     *  retirando os nomes de categorias repetidas
+     */
     const addCategoryTitles = categories
       .filter(category => !existentCategoriesTitles.includes(category))
       .filter((value, index, self) => self.indexOf(value) === index);
 
+    /** Cria as novas categorias no db */
     const newCategories = categoriesRepository.create(
       addCategoryTitles.map(title => ({ title })),
     );
 
     await categoriesRepository.save(newCategories);
 
+    /** Cria array com todas as categorias contidos na transação */
     const finalCategories = [...newCategories, ...existentCategories];
 
     /** TRATAMENTO DAS TRANSAÇÕES */

@@ -3,7 +3,7 @@ import AppError from '../errors/AppError';
 
 import Transaction from '../models/Transaction';
 import Category from '../models/Category';
-import TransactionRepository from '../repositories/TransactionsRepository';
+import TransactionsRepository from '../repositories/TransactionsRepository';
 
 interface Request {
   title: string;
@@ -19,10 +19,10 @@ class CreateTransactionService {
     type,
     category,
   }: Request): Promise<Transaction> {
-    const transactionRepository = getCustomRepository(TransactionRepository);
+    const transactionsRepository = getCustomRepository(TransactionsRepository);
     const categoryRepository = getRepository(Category);
 
-    const { total } = await transactionRepository.getBalance();
+    const { total } = await transactionsRepository.getBalance();
 
     if (type === 'outcome' && value > total) {
       throw new AppError('balance not available!', 400);
@@ -36,23 +36,23 @@ class CreateTransactionService {
       throw new AppError('Invalid transaction type', 400);
     }
 
-    let categoryFound = await categoryRepository.findOne({
+    let transactionCategory = await categoryRepository.findOne({
       where: { title: category },
     });
 
-    if (!categoryFound) {
-      categoryFound = categoryRepository.create({ title: category });
-      await categoryRepository.save(categoryFound);
+    if (!transactionCategory) {
+      transactionCategory = categoryRepository.create({ title: category });
+      await categoryRepository.save(transactionCategory);
     }
 
-    const transaction = transactionRepository.create({
+    const transaction = transactionsRepository.create({
       title,
       value,
       type,
-      category_id: categoryFound.id,
+      category: transactionCategory,
     });
 
-    await transactionRepository.save(transaction);
+    await transactionsRepository.save(transaction);
 
     return transaction;
   }

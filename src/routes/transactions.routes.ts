@@ -14,6 +14,7 @@ const upload = multer(uploadConfig);
 
 const transactionsRouter = Router();
 
+/** Rota get */
 transactionsRouter.get('/', async (request, response) => {
   const transactionsRepository = getCustomRepository(TransactionsRepository);
 
@@ -21,12 +22,10 @@ transactionsRouter.get('/', async (request, response) => {
 
   const balance = await transactionsRepository.getBalance();
 
-  return response.status(200).json({
-    transactions,
-    balance,
-  });
+  return response.json({ transactions, balance });
 });
 
+/** Rota post */
 transactionsRouter.post('/', async (request, response) => {
   const { title, value, type, category } = request.body;
 
@@ -39,19 +38,21 @@ transactionsRouter.post('/', async (request, response) => {
     category,
   });
 
-  return response.status(200).json(transaction);
+  return response.json(transaction);
 });
 
+/** Rota delete */
 transactionsRouter.delete('/:id', async (request, response) => {
   const { id } = request.params;
 
   const deleteTransaction = new DeleteTransactionService();
 
-  await deleteTransaction.execute({ id });
+  await deleteTransaction.execute(id);
 
-  return response.status(200).send();
+  return response.status(204).send();
 });
 
+/** Rota importação */
 transactionsRouter.post(
   '/import',
   upload.single('file'),
