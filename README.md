@@ -20,6 +20,11 @@ Foi implementado o upload de arquivo, permitando subir arquivos csv e adicionar 
 - excluir uma transação;
 - controle sobre o saldo, restringindo retiradas resultantes em saldo negativo;
 
+### Implementação
+- Implementado com typescript;
+- Servidor usando express;
+- Banco de dados postgres e typeorm;
+- Upload de arquivos com multer;
 
 ### Bibliotecas
 - express: utilizada para criação de um servidor;
@@ -31,12 +36,6 @@ Foi implementado o upload de arquivo, permitando subir arquivos csv e adicionar 
 - csv-parse: utilizado para converter arquivos csv;
 - multer: utilizado para importação de arquivos via requisição;
 - pg: plugin de acesso ao banco de dados postgres;
-
-### Implementações
-- Implementado com typescript;
-- servidor usando express;
--
-
 
 <br />
 
@@ -72,12 +71,12 @@ Clonar a pasta do projeto para sua máquina local e instalar as dependências.
     "database": "nome_do_seu_banco",
   ```
 
-### 5. Rodar a migração para criação das tabelas
+### 54 Rodar a migração para criação das tabelas
 ```bash
 $ yarn typeorm migration:run
 ```
 
-### 4. Iniciando o servidor
+### 5. Iniciando o servidor
 ```bash
 $ yarn dev:server
 ```
