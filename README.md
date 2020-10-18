@@ -71,7 +71,7 @@ Clonar a pasta do projeto para sua máquina local e instalar as dependências.
     "database": "nome_do_seu_banco",
   ```
 
-### 54 Rodar a migração para criação das tabelas
+### 4. Rodar a migração para criação das tabelas
 ```bash
 $ yarn typeorm migration:run
 ```
